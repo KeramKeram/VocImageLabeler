@@ -3,7 +3,6 @@
 
 import npyscreen
 
-
 class TestApp(npyscreen.NPSApp):
     def main(self):
         main_screen = npyscreen.Form(name="VocImageLabeler", )
