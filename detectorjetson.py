@@ -51,14 +51,8 @@ class DetectorJetson:
         self.width = width
         self.height = height
 
-    def detect(self, image):
-        detections = self.detector.Detect(image)
-        arr = jetson.utils.cudaToNumpy(image, self.width, self.height)
-        arr1 = cv2.cvtColor(arr.astype(np.uint8), cv2.COLOR_RGBA2BGR)
-        return arr1, detections
-
     def run(self, image):
-        _, detections = self.detect(image)
+        detections = self.detector.Detect(image)
         Points = namedtuple('Points', ['classid', 'x1', 'y1', 'x2', 'y2'])
         points_dict = dict()
         for detect in detections:
