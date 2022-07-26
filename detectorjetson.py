@@ -1,10 +1,11 @@
+from collections import namedtuple
+import argparse
 import cv2
 import jetson.inference
 import jetson.utils
 import logging
 import numpy as np
 import sys
-import argparse
 
 logger = logging.getLogger('root')
 
@@ -57,5 +58,12 @@ class DetectorJetson:
         return arr1, detections
 
     def run(self, image):
-        output, detections = self.detect(image)
-        return output, detections
+        _, detections = self.detect(image)
+        Points = namedtuple('Points', ['classid', 'x1', 'y1', 'x2', 'y2'])
+        points_dict = dict()
+        for detect in detections:
+            if detect.ClassID not in points_dict:
+                points_dict[detect.ClassID] = []
+            points_dict[detect.ClassID].append(Points(detect.ClassID, detect.Left, detect.Top, detect.Right, detect.Bottom))
+
+        return points_dict
