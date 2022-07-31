@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import detectorjetson
+#import detectorjetson
 from os import listdir
 from os.path import isfile, join
-import jetson.utils
+#import jetson.utils
 import npyscreen
 
 
@@ -30,11 +30,12 @@ class TestApp(npyscreen.NPSApp):
         main_screen.edit()
 
     def start(self, widget):
-        only_files = [f for f in listdir(str(self.path_to_images_label.value)) if
-                      isfile(join(str(self.path_to_images_label.value), f))]
+        contents = listdir(str(self.path_to_images.value))
+        files = filter(lambda f: isfile(join(self.path_to_images.value,f)),contents)
+        files_list = list(files)
         detector = detectorjetson.DetectorJetson(32, 32, str(self.path_to_model.value),
-                                                 str(self.path_to_images_label.value))
-        for file in only_files:
+                                                 str(self.path_to_model_label.value))
+        for file in files_list:
             image = jetson.utils.loadImage(str(self.path_to_images_label.value) + "/" + file)
             rect_list = detector.run(image)
 
