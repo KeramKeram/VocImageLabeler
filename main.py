@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
-#import detectorjetson
+import detectorjetson
 from os import listdir
 from os.path import isfile, join
-#import jetson.utils
+import jetson.utils
 import npyscreen
 
 
