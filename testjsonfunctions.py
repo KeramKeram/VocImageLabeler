@@ -9,7 +9,7 @@ class MyTestCase(unittest.TestCase):
     def test_add_two_rects(self):
         golden_json_file = open('approvaltestdata/json_example.json')
         data_golden = json.load(golden_json_file)
-        json_file_example = open('templatejson.json')
+        json_file_example = open('testtemplatejson.json')
         data_example = json.load(json_file_example)
 
         Points = namedtuple('Points', ['x1', 'y1', 'x2', 'y2'])
