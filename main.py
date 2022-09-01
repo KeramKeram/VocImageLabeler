@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # encoding: utf-8
 from collections import namedtuple
+from commondatajson import CommonJsonData
 from os import listdir
 from os.path import isfile, join
+from points import Points
 import detectorjetson
 import jetson.utils
-import json
+import jsonfunctions
 
 def main():
     paths_tuple = namedtuple('paths', ['path_to_images', 'path_to_images_label', 'path_to_model'])
@@ -24,5 +26,11 @@ def start(paths_tuple):
     for file in files_list:
         image = jetson.utils.loadImage(str(paths_tuple.path_to_images) + "/" + file)
         rect_list = detector.run(image)
+        #on jeston read images size
+        common_file_data = CommonJsonData(paths_tuple.path_to_images, file, str(paths_tuple.path_to_images) + "/" + file, 800, 600)
+        json_file = jsonfunctions.prepare_json_file(common_file_data)
+        for key in rect_list:
+            result = jsonfunctions.add_rect_to_json(rect_list[key], rect_list[key].classid, json_file)
+
 if __name__ == "__main__":
     main()
