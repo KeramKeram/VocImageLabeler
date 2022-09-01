@@ -5,7 +5,7 @@ from os import listdir
 from os.path import isfile, join
 import detectorjetson
 import jetson.utils
-
+import json
 
 def main():
     paths_tuple = namedtuple('paths', ['path_to_images', 'path_to_images_label', 'path_to_model'])
@@ -24,7 +24,5 @@ def start(paths_tuple):
     for file in files_list:
         image = jetson.utils.loadImage(str(paths_tuple.path_to_images) + "/" + file)
         rect_list = detector.run(image)
-
-
 if __name__ == "__main__":
     main()
