@@ -1,0 +1,20 @@
+{
+   "data":[
+      {
+         "annotation":{
+            "folder":"",
+            "filename":"",
+            "path":"",
+            "source":{
+               "database":"Unknown"
+            },
+            "size":{
+               "width":,
+               "height":,
+               "depth":3
+            },
+            "segmented":0
+         }
+      }
+   ]
+}
