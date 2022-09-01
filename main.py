@@ -3,8 +3,8 @@
 from collections import namedtuple
 from os import listdir
 from os.path import isfile, join
-#import detectorjetson
-#import jetson.utils
+import detectorjetson
+import jetson.utils
 
 
 def main():
@@ -12,17 +12,19 @@ def main():
     paths_tuple.path_to_images = input("Path to images:")
     paths_tuple.path_to_images_label = input("Path to labels:")
     paths_tuple.path_to_model = input("Path to model:")
+    start(paths_tuple)
 
 
-def start(widget):
-    contents = listdir(str(self.path_to_images.value))
-    files = filter(lambda f: isfile(join(self.path_to_images.value, f)), contents)
+def start(paths_tuple):
+    contents = listdir(str(paths_tuple.path_to_images))
+    files = filter(lambda f: isfile(join(paths_tuple.path_to_images, f)), contents)
     files_list = list(files)
-    detector = detectorjetson.DetectorJetson(32, 32, str(self.path_to_model.value),
-                                             str(self.path_to_model_label.value))
+    detector = detectorjetson.DetectorJetson(32, 32, str(paths_tuple.path_to_model),
+                                             str(paths_tuple.path_to_images_label))
     for file in files_list:
-        image = jetson.utils.loadImage(str(self.path_to_images_label.value) + "/" + file)
+        image = jetson.utils.loadImage(str(paths_tuple.path_to_images_label) + "/" + file)
         rect_list = detector.run(image)
+
 
 if __name__ == "__main__":
     main()
