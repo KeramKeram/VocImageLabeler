@@ -22,7 +22,7 @@ def start(paths_tuple):
     detector = detectorjetson.DetectorJetson(32, 32, str(paths_tuple.path_to_model),
                                              str(paths_tuple.path_to_images_label))
     for file in files_list:
-        image = jetson.utils.loadImage(str(paths_tuple.path_to_images_label) + "/" + file)
+        image = jetson.utils.loadImage(str(paths_tuple.path_to_images) + "/" + file)
         rect_list = detector.run(image)
 
 
