@@ -9,8 +9,8 @@
                "database":"Unknown"
             },
             "size":{
-               "width":,
-               "height":,
+               "width":0,
+               "height":0,
                "depth":3
             },
             "segmented":0
