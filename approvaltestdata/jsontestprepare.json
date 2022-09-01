@@ -1,0 +1,20 @@
+{
+   "data":[
+      {
+         "annotation":{
+            "folder":"/home/user/",
+            "filename":"test.jpg",
+            "path":"/home/user/test.jpg",
+            "source":{
+               "database":"Unknown"
+            },
+            "size":{
+               "width":800,
+               "height":600,
+               "depth":3
+            },
+            "segmented":0
+         }
+      }
+   ]
+}

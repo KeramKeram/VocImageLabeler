@@ -31,7 +31,7 @@ def prepare_json_file(commondata):
     current_data = data_template['data'][0]['annotation']
     current_data['folder'] = str(commondata.folder)
     current_data['filename'] = str(commondata.filename)
-    current_data['path'] = str(str(commondata.path) + "/" + commondata.filename)
+    current_data['path'] = str(str(commondata.path))
     current_data['size']['width'] = commondata.width
     current_data['size']['height'] = commondata.height
     data_template['data'][0]['annotation'] = current_data
