@@ -25,14 +25,14 @@ def add_rect_to_json(coordinates, class_name, json_data):
     return json_data
 
 
-def prepare_json_file(commn_data):
+def prepare_json_file(commondata):
     json_file_template = open('testtemplatejson.json')
     data_template = json.load(json_file_template)
     current_data = data_template['data'][0]['annotation']
-    current_data['folder'] = str(commn_data.folder)
-    current_data['filename'] = str(commn_data.filename)
-    current_data['path'] = str(str(commn_data.path) + "/" + commn_data.filename)
-    current_data['size']['width'] = commn_data.width
-    current_data['size']['height'] = commn_data.height
+    current_data['folder'] = str(commondata.folder)
+    current_data['filename'] = str(commondata.filename)
+    current_data['path'] = str(str(commondata.path) + "/" + commondata.filename)
+    current_data['size']['width'] = commondata.width
+    current_data['size']['height'] = commondata.height
     data_template['data'][0]['annotation'] = current_data
     return data_template
