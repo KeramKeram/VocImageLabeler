@@ -1,10 +1,8 @@
 from collections import namedtuple
 import argparse
-import cv2
 import jetson.inference
 import jetson.utils
 import logging
-import numpy as np
 import sys
 
 logger = logging.getLogger('root')

@@ -4,15 +4,11 @@ from collections import namedtuple
 from commondatajson import CommonJsonData
 from os import listdir
 from os.path import isfile, join
-from points import Points
 import detectorjetson
 import jetson.utils
 import jsonfunctions
 from Json2PascalVoc.Converter import Converter
 import json
-import os
-import shutil
-
 
 def main():
     paths_tuple = namedtuple('paths', ['path_to_images', 'path_to_images_label', 'path_to_model'])
