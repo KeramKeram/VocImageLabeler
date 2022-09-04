@@ -54,6 +54,7 @@ class DetectorJetson:
     def run(self, image):
         detections = self.detector.Detect(image)
         points_dict = dict()
+        #TODO: change classid to name
         for detect in detections:
             if detect.ClassID not in points_dict:
                 points_dict[detect.ClassID] = []
