@@ -9,13 +9,12 @@ def load_json(path):
     return data
 
 
-def add_rect_to_json(coordinates, class_name, json_data):
+def add_rect_to_json(x1,  y1,  x2,  y2, class_name, json_data):
     data = {"name": str(class_name),
             "pose": "Unspecified",
             "truncated": 0,
             "difficult": 0,
-            "bndbox": {"xmin": coordinates.x1, "ymin": coordinates.y1, "xmax": coordinates.x2,
-                       "ymax": coordinates.y2}}
+            "bndbox": {"xmin": x1, "ymin": y1, "xmax": x2, "ymax": y2}}
     current_data = json_data['data'][0]['annotation']
     if 'object' not in current_data:
         current_data['object'] = []

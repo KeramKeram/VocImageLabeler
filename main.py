@@ -11,9 +11,12 @@ import jsonfunctions
 
 def main():
     paths_tuple = namedtuple('paths', ['path_to_images', 'path_to_images_label', 'path_to_model'])
-    paths_tuple.path_to_images = input("Path to images:")
-    paths_tuple.path_to_images_label = input("Path to labels:")
-    paths_tuple.path_to_model = input("Path to model:")
+    #paths_tuple.path_to_images = input("Path to images:")
+    #paths_tuple.path_to_images_label = input("Path to labels:")
+    #paths_tuple.path_to_model = input("Path to model:")
+    paths_tuple.path_to_images = "/home/radek/Pictures/ogony/nok"
+    paths_tuple.path_to_images_label = "/home/radek/model/ogony_ssd/labels.txt"
+    paths_tuple.path_to_model = "/home/radek/model/ogony_ssd/ssd-mobilenet.onnx"
     start(paths_tuple)
 
 
@@ -30,7 +33,9 @@ def start(paths_tuple):
         common_file_data = CommonJsonData(paths_tuple.path_to_images, file, str(paths_tuple.path_to_images) + "/" + file, 800, 600)
         json_file = jsonfunctions.prepare_json_file(common_file_data)
         for key in rect_list:
-            result = jsonfunctions.add_rect_to_json(rect_list[key], rect_list[key].classid, json_file)
+            cl = rect_list[key]
+            for value in cl:
+                json_file = jsonfunctions.add_rect_to_json(value[1],  value[2],  value[3],  value[4] , value[0], json_file)
 
 if __name__ == "__main__":
     main()

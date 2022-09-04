@@ -53,11 +53,10 @@ class DetectorJetson:
 
     def run(self, image):
         detections = self.detector.Detect(image)
-        Points = namedtuple('Points', ['classid', 'x1', 'y1', 'x2', 'y2'])
         points_dict = dict()
         for detect in detections:
             if detect.ClassID not in points_dict:
                 points_dict[detect.ClassID] = []
-            points_dict[detect.ClassID].append(Points(detect.ClassID, detect.Left, detect.Top, detect.Right, detect.Bottom))
+            points_dict[detect.ClassID].append([detect.ClassID, detect.Left, detect.Top, detect.Right, detect.Bottom])
 
         return points_dict
