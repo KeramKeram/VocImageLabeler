@@ -34,4 +34,5 @@ def prepare_json_file(commondata):
     current_data['size']['width'] = commondata.width
     current_data['size']['height'] = commondata.height
     data_template['data'][0]['annotation'] = current_data
+    json_file_template.close()
     return data_template
