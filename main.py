@@ -15,9 +15,9 @@ def main():
     #paths_tuple.path_to_images = input("Path to images:")
     #paths_tuple.path_to_images_label = input("Path to labels:")
     #paths_tuple.path_to_model = input("Path to model:")
-    paths_tuple.path_to_images = "/home/user/Pictures/ogony/nok"
-    paths_tuple.path_to_images_label = "/home/user/model/ogony_ssd/labels.txt"
-    paths_tuple.path_to_model = "/home/user/model/ogony_ssd/ssd-mobilenet.onnx"
+    paths_tuple.path_to_images = "/home/radek/Pictures/ogony/nok"
+    paths_tuple.path_to_images_label = "/home/radek/model/ogony_ssd/labels.txt"
+    paths_tuple.path_to_model = "/home/radek/model/ogony_ssd/ssd-mobilenet.onnx"
     start(paths_tuple)
 
 
@@ -32,12 +32,20 @@ def start(paths_tuple):
     for file in files_list:
         image = jetson.utils.loadImage(str(paths_tuple.path_to_images) + "/" + file)
         rect_list = detector.run(image)
+        labels_dict = dict()
+        labels_counter = 0
+        lines = None
+        with open(str(paths_tuple.path_to_images_label), 'r') as f:
+            lines = f.readlines()
+        for line in lines:
+            labels_dict[str(labels_counter)] = str(line)
+            labels_counter = labels_counter + 1
         #on jeston read images size
         common_file_data = CommonJsonData(paths_tuple.path_to_images, file, str(paths_tuple.path_to_images) + "/" + file, 800, 600)
         json_file = jsonfunctions.prepare_json_file(common_file_data)
         for key in rect_list:
             for value in rect_list[key]:
-                json_file = jsonfunctions.add_rect_to_json(value[1],  value[2],  value[3],  value[4] , value[0], json_file)
+                json_file = jsonfunctions.add_rect_to_json(value[1],  value[2],  value[3],  value[4] , labels_dict[str(value[0])], json_file)
             json_object = json.dumps(json_file, indent=4)
             with open("translationfile.json", "w") as outfile:
                 outfile.write(json_object)
