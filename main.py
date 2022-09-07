@@ -26,6 +26,11 @@ def start(paths_tuple):
     #TODO: filter xml files
     files = filter(lambda f: isfile(join(paths_tuple.path_to_images, f)), contents)
     files_list = list(files)
+    for image_file in files_list:
+        file_split = image_file.split(".")
+        test = file_split[-1]
+        if (len(file_split) > 0)  and (file_split[-1].__eq__("xml")):
+            files_list.remove(image_file)
     detector = detectorjetson.DetectorJetson(32, 32, str(paths_tuple.path_to_model),
                                              str(paths_tuple.path_to_images_label))
     json_converter = Converter()
