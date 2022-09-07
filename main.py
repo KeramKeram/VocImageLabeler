@@ -40,8 +40,7 @@ def start(paths_tuple):
         for line in lines:
             labels_dict[str(labels_counter)] = str(line)
             labels_counter = labels_counter + 1
-        #on jeston read images size
-        common_file_data = CommonJsonData(paths_tuple.path_to_images, file, str(paths_tuple.path_to_images) + "/" + file, 800, 600)
+        common_file_data = CommonJsonData(paths_tuple.path_to_images, file, str(paths_tuple.path_to_images) + "/" + file, image.shape[0],  image.shape[1])
         json_file = jsonfunctions.prepare_json_file(common_file_data)
         for key in rect_list:
             for value in rect_list[key]:
