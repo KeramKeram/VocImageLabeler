@@ -1,4 +1,3 @@
-from collections import namedtuple
 import argparse
 import jetson.inference
 import jetson.utils
@@ -12,12 +11,8 @@ class DetectorJetson:
     path_to_model = ""
     path_to_label = ""
     detector = None
-    width = 0
-    height = 0
 
-    def __init__(self, width, height, custom_model, custom_labels):
-        self.width = width
-        self.height = height
+    def __init__(self, custom_model, custom_labels):
         argv = ['--model=' + custom_model, '--labels=' + custom_labels,
                 '--input-blob=input_0', '--output-cvg=scores', '--output-bbox=boxes']
         parser = argparse.ArgumentParser(
@@ -44,10 +39,6 @@ class DetectorJetson:
             raise
         else:
             logger.error("Jetson model init OK!")
-
-    def set_size(self, width, height):
-        self.width = width
-        self.height = height
 
     def run(self, image):
         detections = self.detector.Detect(image)
