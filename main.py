@@ -15,9 +15,9 @@ def main():
     #paths_tuple.path_to_images = input("Path to images:")
     #paths_tuple.path_to_images_label = input("Path to labels:")
     #paths_tuple.path_to_model = input("Path to model:")
-    paths_tuple.path_to_images = "/home/radek/Pictures/ogony/nok"
-    paths_tuple.path_to_images_label = "/home/radek/model/ogony_ssd/labels.txt"
-    paths_tuple.path_to_model = "/home/radek/model/ogony_ssd/ssd-mobilenet.onnx"
+    paths_tuple.path_to_images = "/home/user/Pictures/ogony/nok"
+    paths_tuple.path_to_images_label = "/home/user/model/ogony_ssd/labels.txt"
+    paths_tuple.path_to_model = "/home/user/model/ogony_ssd/ssd-mobilenet.onnx"
     start(paths_tuple)
 
 
