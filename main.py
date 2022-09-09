@@ -5,6 +5,7 @@ from commondatajson import CommonJsonData
 from os import listdir
 from os.path import isfile, join
 import detectorjetson
+import filtring
 import jetson.utils
 import jsonfunctions
 from Json2PascalVoc.Converter import Converter
@@ -12,25 +13,16 @@ import json
 
 def main():
     paths_tuple = namedtuple('paths', ['path_to_images', 'path_to_images_label', 'path_to_model'])
-    #paths_tuple.path_to_images = input("Path to images:")
-    #paths_tuple.path_to_images_label = input("Path to labels:")
-    #paths_tuple.path_to_model = input("Path to model:")
-    paths_tuple.path_to_images = "/home/user/Pictures/ogony/nok"
-    paths_tuple.path_to_images_label = "/home/user/model/ogony_ssd/labels.txt"
-    paths_tuple.path_to_model = "/home/user/model/ogony_ssd/ssd-mobilenet.onnx"
+    paths_tuple.path_to_images = input("Path to images:")
+    paths_tuple.path_to_images_label = input("Path to labels:")
+    paths_tuple.path_to_model = input("Path to model:")
     start(paths_tuple)
 
 
 def start(paths_tuple):
     contents = listdir(str(paths_tuple.path_to_images))
-    #TODO: filter xml files
     files = filter(lambda f: isfile(join(paths_tuple.path_to_images, f)), contents)
-    files_list = list(files)
-    for image_file in files_list:
-        file_split = image_file.split(".")
-        test = file_split[-1]
-        if (len(file_split) > 0)  and (file_split[-1].__eq__("xml")):
-            files_list.remove(image_file)
+    files_list = filtring.remove_xml_from_file_list(list(files))
     detector = detectorjetson.DetectorJetson(32, 32, str(paths_tuple.path_to_model),
                                              str(paths_tuple.path_to_images_label))
     json_converter = Converter()
