@@ -30,7 +30,7 @@ python3 main.py
 ```
 Path to images:/home/user/pictures
 Path to labels:/home/user/models/labels.txt
-Path to model:/home/user/ssd-mobilenet.onnx
+Path to model:/home/user/models/ssd-mobilenet.onnx
 ```
 3. After script will end his work(sipmly program will end with 0) we go to /home/user/pictures and we will see voc xml files.
 <br />
