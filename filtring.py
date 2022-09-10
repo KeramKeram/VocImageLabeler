@@ -1,4 +1,3 @@
-
 def remove_xml_from_file_list(files_list):
     files = list(files_list)
     list_lenght = len(files_list)

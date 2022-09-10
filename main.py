@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
+from Json2PascalVoc.Converter import Converter
 from collections import namedtuple
 from commondatajson import CommonJsonData
 from os import listdir
@@ -7,9 +8,9 @@ from os.path import isfile, join
 import detectorjetson
 import filtring
 import jetson.utils
-import jsonfunctions
-from Json2PascalVoc.Converter import Converter
 import json
+import jsonfunctions
+
 
 def main():
     paths_tuple = namedtuple('paths', ['path_to_images', 'path_to_images_label', 'path_to_model'])
@@ -29,23 +30,34 @@ def start(paths_tuple):
     for file in files_list:
         image = jetson.utils.loadImage(str(paths_tuple.path_to_images) + "/" + file)
         rect_list = detector.run(image)
-        labels_dict = dict()
-        labels_counter = 0
-        lines = None
-        with open(str(paths_tuple.path_to_images_label), 'r') as f:
-            lines = f.readlines()
-        for line in lines:
-            labels_dict[str(labels_counter)] = str(line)
-            labels_counter = labels_counter + 1
-        common_file_data = CommonJsonData(paths_tuple.path_to_images, file, str(paths_tuple.path_to_images) + "/" + file, image.shape[0],  image.shape[1])
+        labels_dict = create_labels(paths_tuple.path_to_images_label)
+        common_file_data = CommonJsonData(paths_tuple.path_to_images, file,
+                                          str(paths_tuple.path_to_images) + "/" + file, image.shape[0], image.shape[1])
         json_file = jsonfunctions.prepare_json_file(common_file_data)
-        for key in rect_list:
-            for value in rect_list[key]:
-                json_file = jsonfunctions.add_rect_to_json(value[1],  value[2],  value[3],  value[4] , labels_dict[str(value[0])], json_file)
-            json_object = json.dumps(json_file, indent=4)
-            with open("translationfile.json", "w") as outfile:
-                outfile.write(json_object)
-            json_converter.convertJsonToPascal("translationfile.json")
+        create_voc_files(rect_list, labels_dict, json_converter, json_file)
+
+
+def create_labels(path_to_images_label):
+    labels_dict = dict()
+    labels_counter = 0
+    lines = None
+    with open(str(path_to_images_label), 'r') as f:
+        lines = f.readlines()
+    for line in lines:
+        labels_dict[str(labels_counter)] = str(line)
+        labels_counter = labels_counter + 1
+    return labels_dict
+
+
+def create_voc_files(rect_list, labels_dict, json_converter, json_file):
+    for key in rect_list:
+        for value in rect_list[key]:
+            json_file = jsonfunctions.add_rect_to_json(value[1], value[2], value[3], value[4],
+                                                       labels_dict[str(value[0])], json_file)
+        json_object = json.dumps(json_file, indent=4)
+        with open("translationfile.json", "w") as outfile:
+            outfile.write(json_object)
+        json_converter.convertJsonToPascal("translationfile.json")
 
 
 if __name__ == "__main__":

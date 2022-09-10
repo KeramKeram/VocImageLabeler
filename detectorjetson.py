@@ -33,8 +33,7 @@ class DetectorJetson:
         try:
             opt = parser.parse_known_args()[0]
             self.detector = jetson.inference.detectNet(opt.network, argv, opt.threshold)
-        except:
-            e = sys.exc_info()[0]
+        except Exception as e:
             logger.error("Can't init Jetson model with error:" + e)
             raise
         else:
@@ -43,7 +42,6 @@ class DetectorJetson:
     def run(self, image):
         detections = self.detector.Detect(image)
         points_dict = dict()
-        #TODO: change classid to name
         for detect in detections:
             if detect.ClassID not in points_dict:
                 points_dict[detect.ClassID] = []

@@ -9,7 +9,7 @@ def load_json(path):
     return data
 
 
-def add_rect_to_json(x1,  y1,  x2,  y2, class_name, json_data):
+def add_rect_to_json(x1, y1, x2, y2, class_name, json_data):
     data = {"name": str(class_name),
             "pose": "Unspecified",
             "truncated": 0,
