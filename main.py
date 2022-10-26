@@ -5,12 +5,10 @@ from collections import namedtuple
 from commondatajson import CommonJsonData
 from os import listdir
 from os.path import isfile, join
-import detectorjetson
 import filtring
-import jetson.utils
 import json
 import jsonfunctions
-
+from strategy import Context
 
 
 def main():
@@ -27,15 +25,13 @@ def start(paths_tuple):
     contents = listdir(str(paths_tuple.path_to_images))
     files = filter(lambda f: isfile(join(paths_tuple.path_to_images, f)), contents)
     files_list = filtring.remove_xml_from_file_list(list(files))
-    detector = detectorjetson.DetectorJetson(str(paths_tuple.path_to_model),
-                                             str(paths_tuple.path_to_images_label))
+    ctx = Context(paths_tuple.type)
     json_converter = Converter()
     for file in files_list:
-        image = jetson.utils.loadImage(str(paths_tuple.path_to_images) + "/" + file)
-        rect_list = detector.run(image)
+        rect_list, width, height = ctx.execute(file)
         labels_dict = create_labels(paths_tuple.path_to_images_label)
         common_file_data = CommonJsonData(paths_tuple.path_to_images, file,
-                                          str(paths_tuple.path_to_images) + "/" + file, image.shape[0], image.shape[1])
+                                          str(paths_tuple.path_to_images) + "/" + file, width, height)
         json_file = jsonfunctions.prepare_json_file(common_file_data)
         create_voc_files(rect_list, labels_dict, json_converter, json_file)
 
