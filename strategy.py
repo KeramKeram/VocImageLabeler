@@ -1,4 +1,3 @@
-from __future__ import annotations
 from abc import ABC, abstractmethod
 
 try:
@@ -16,7 +15,7 @@ class Context():
     The Context defines the interface of interest to clients.
     """
 
-    def __init__(self, strategy: int, paths_tuple) -> None:
+    def __init__(self, strategy: int, path_to_model, path_to_images_label, path_to_images) -> None:
         """
         Usually, the Context accepts a strategy through the constructor, but
         also provides a setter to change it at runtime.
@@ -27,9 +26,10 @@ class Context():
             self._strategy = JetsonStrategy(paths_tuple)
         else:
             self._strategy = None
+        self._strategy = JetsonStrategy(path_to_model, path_to_images_label, path_to_images)
 
-    @property
-    def strategy(self) -> Strategy:
+
+    def strategy(self):
         """
         The Context maintains a reference to one of the Strategy objects. The
         Context does not know the concrete class of a strategy. It should work
@@ -38,22 +38,22 @@ class Context():
 
         return self._strategy
 
-    @strategy.setter
-    def strategy(self, strategy: Strategy) -> None:
+
+    def strategy(self, strategy) -> None:
         """
         Usually, the Context allows replacing a Strategy object at runtime.
         """
 
         self._strategy = strategy
 
-    def execute(self, file: str):
+    def execute(self, file):
         """
         The Context delegates some work to the Strategy object instead of
         implementing multiple versions of the algorithm on its own.
         """
 
         # ...
-        return self._strategy.do_algorithm(str)
+        return self._strategy.do_algorithm(file)
 
         # ...
 
@@ -67,8 +67,7 @@ class Strategy(ABC):
     Strategies.
     """
 
-    @abstractmethod
-    def do_algorithm(self, file: str):
+    def do_algorithm(self, file):
         pass
 
 
@@ -80,18 +79,22 @@ interface. The interface makes them interchangeable in the Context.
 
 class JetsonStrategy(Strategy):
     detector = None
-    paths_tuple = None
+    path_to_model = None
+    path_to_images_label = None
+    path_to_images = None
 
-    def __init__(self, paths_tuple) -> None:
-        self.paths_tuple = paths_tuple
-        self.detector = detectorjetson.DetectorJetson(str(self.paths_tuple.path_to_model),
-                                                      str(self.paths_tuple.path_to_images_label))
+    def __init__(self, path_to_model, path_to_images_label, path_to_images) -> None:
+        self.path_to_model = path_to_model
+        self.path_to_images_label = path_to_images_label
+        self.path_to_images = path_to_images
+        self.detector = detectorjetson.DetectorJetson(str(self.path_to_model),
+                                                      str(self.path_to_images_label))
 
-    def do_algorithm(self, file: str):
-        image = jetson.utils.loadImage(str(self.paths_tuple.path_to_images) + "/" + file)
+    def do_algorithm(self, file):
+        image = jetson.utils.loadImage(str(self.path_to_images) + "/" + file)
         return self.detector.run(image), image.shape[0], image.shape[1]
 
 
 class ConcreteStrategyB(Strategy):
-    def do_algorithm(self, file: str):
+    def do_algorithm(self, file):
         pass
