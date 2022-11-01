@@ -25,7 +25,7 @@ def start(paths_tuple):
     contents = listdir(str(paths_tuple.path_to_images))
     files = filter(lambda f: isfile(join(paths_tuple.path_to_images, f)), contents)
     files_list = filtring.remove_xml_from_file_list(list(files))
-    ctx = Context(paths_tuple.type, paths_tuple.path_to_model, paths_tuple.path_to_images_label, paths_tuple.path_to_images)
+    ctx = Context(int(paths_tuple.type), paths_tuple.path_to_model, paths_tuple.path_to_images_label, paths_tuple.path_to_images)
     json_converter = Converter()
     for file in files_list:
         rect_list, width, height = ctx.execute(str(file))

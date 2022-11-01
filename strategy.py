@@ -23,10 +23,7 @@ class Context():
         if strategy == 1:
             self._strategy = ConcreteStrategyB
         elif strategy == 2:
-            self._strategy = JetsonStrategy(paths_tuple)
-        else:
-            self._strategy = None
-        self._strategy = JetsonStrategy(path_to_model, path_to_images_label, path_to_images)
+            self._strategy = JetsonStrategy(path_to_model, path_to_images_label, path_to_images)
 
 
     def strategy(self):
