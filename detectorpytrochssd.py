@@ -1,5 +1,6 @@
+import sys
+sys.path.append('/home/radek/PycharmProjects/VocImageLabeler/pytorchssd')
 from pytorchssd.vision.ssd.mobilenetv1_ssd import create_mobilenetv1_ssd, create_mobilenetv1_ssd_predictor
-
 
 class DetectorPytrochSSD:
     path_to_model = ""
@@ -12,15 +13,19 @@ class DetectorPytrochSSD:
         self.path_to_label = custom_labels
         class_names = [name.strip() for name in open(self.path_to_label).readlines()]
         self.detector = create_mobilenetv1_ssd(len(class_names), is_test=True)
+        self.detector.load(self.path_to_model)
         self.predictor = create_mobilenetv1_ssd_predictor(self.detector, candidate_size=200)
+
+
 
     def run(self, image):
         boxes, labels, probs = self.predictor.predict(image, 10, 0.4)
         points_dict = dict()
         for i in range(boxes.size(0)):
             box = boxes[i, :]
-            if labels[i] not in points_dict:
-                points_dict[labels[i]] = []
-            points_dict[labels[i]].append([labels[i], box[0], box[1], box[2], box[3]])
+            label = str(labels[i].numpy())
+            if label not in points_dict:
+                points_dict[label] = []
+            points_dict[label].append([label, int(box[0]), int(box[1]), int(box[2]), int(box[3])])
 
         return points_dict

@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from detectorpytrochssd import DetectorPytrochSSD
+import cv2
 
 try:
     import detectorjetson
@@ -21,9 +23,9 @@ class Context():
         also provides a setter to change it at runtime.
         """
         if strategy == 1:
-            self._strategy = ConcreteStrategyB
-        elif strategy == 2:
             self._strategy = JetsonStrategy(path_to_model, path_to_images_label, path_to_images)
+        elif strategy == 2:
+            self._strategy = PytoechSSDStrategy(path_to_model, path_to_images_label, path_to_images)
 
 
     def strategy(self):
@@ -92,6 +94,19 @@ class JetsonStrategy(Strategy):
         return self.detector.run(image), image.shape[0], image.shape[1]
 
 
-class ConcreteStrategyB(Strategy):
+class PytoechSSDStrategy(Strategy):
+    detector = None
+    path_to_model = None
+    path_to_images_label = None
+    path_to_images = None
+    def __init__(self, path_to_model, path_to_images_label, path_to_images) -> None:
+        self.path_to_model = path_to_model
+        self.path_to_images_label = path_to_images_label
+        self.path_to_images = path_to_images
+        self.detector = DetectorPytrochSSD(str(self.path_to_model),
+                                                      str(self.path_to_images_label))
     def do_algorithm(self, file):
-        pass
+        cap = cv2.VideoCapture(str(self.path_to_images) + "/" + file, 0)
+        ret, orig_image = cap.read()
+        image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
+        return self.detector.run(image), image.shape[0], image.shape[1]
