@@ -5,15 +5,16 @@ from collections import namedtuple
 from commondatajson import CommonJsonData
 from os import listdir
 from os.path import isfile, join
-import detectorjetson
 import filtring
-import jetson.utils
 import json
 import jsonfunctions
+from strategy import Context
 
 
 def main():
-    paths_tuple = namedtuple('paths', ['path_to_images', 'path_to_images_label', 'path_to_model'])
+    paths_tuple = namedtuple('ui', ['type', 'path_to_images', 'path_to_images_label', 'path_to_model'])
+    print("Choose type of device. \n 1. Jetson nano(dusty) \n 2. Pc by pytroch-ssd \n")
+    paths_tuple.type = input("Type 1 or 2:")
     paths_tuple.path_to_images = input("Path to images:")
     paths_tuple.path_to_images_label = input("Path to labels:")
     paths_tuple.path_to_model = input("Path to model:")
@@ -24,15 +25,13 @@ def start(paths_tuple):
     contents = listdir(str(paths_tuple.path_to_images))
     files = filter(lambda f: isfile(join(paths_tuple.path_to_images, f)), contents)
     files_list = filtring.remove_xml_from_file_list(list(files))
-    detector = detectorjetson.DetectorJetson(str(paths_tuple.path_to_model),
-                                             str(paths_tuple.path_to_images_label))
+    ctx = Context(int(paths_tuple.type), paths_tuple.path_to_model, paths_tuple.path_to_images_label, paths_tuple.path_to_images)
     json_converter = Converter()
     for file in files_list:
-        image = jetson.utils.loadImage(str(paths_tuple.path_to_images) + "/" + file)
-        rect_list = detector.run(image)
+        rect_list, width, height = ctx.execute(str(file))
         labels_dict = create_labels(paths_tuple.path_to_images_label)
         common_file_data = CommonJsonData(paths_tuple.path_to_images, file,
-                                          str(paths_tuple.path_to_images) + "/" + file, image.shape[0], image.shape[1])
+                                          str(paths_tuple.path_to_images) + "/" + file, width, height)
         json_file = jsonfunctions.prepare_json_file(common_file_data)
         create_voc_files(rect_list, labels_dict, json_converter, json_file)
 
