@@ -44,7 +44,7 @@ class DetectorJetson:
         detections = self.detector.Detect(image)
         points_dict = dict()
         for detect in detections:
-            if detect.Confidence < self.confidence:
+            if detect.Confidence < (self.confidence/100):
                 continue
             if detect.ClassID not in points_dict:
                 points_dict[detect.ClassID] = []

@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
-from detectorpytrochssd import DetectorPytrochSSD
+try:
+    from detectorpytrochssd import DetectorPytrochSSD
+except ImportError:
+    pass
 import cv2
 
 try:
