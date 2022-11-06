@@ -30,7 +30,7 @@ Let's say that in /home/user we have directories: pictures, models. In picuters 
 python3 main.py
 ```
 2. Script will first ask if you want to run it on jetson nano or on PC.
-3. Script is using text interface he will ask for three paths, for example we enter:
+3. Script is using text interface he will ask for three paths and confidence(value above which the object is detected) for example we enter:
 ```
 Path to images:/home/user/pictures
 Path to labels:/home/user/models/labels.txt
@@ -38,6 +38,9 @@ Path to labels:/home/user/models/labels.txt
 Path to model:/home/user/models/ssd-mobilenet.onnx
 #in case of Pc we use .pth files of ssd model
 Path to model:/home/user/models/mb1-ssd-Epoch-199-Loss-0.7120061775048574.pth
+# When net have at least 40% of confidance that object was detected than mark him on picture
+Level of confidence(1-100):40
+
 ```
 4.After script will end his work(sipmly program will end with 0) we go to /home/user/pictures and we will see voc xml files.
 <br />

@@ -12,12 +12,14 @@ from strategy import Context
 
 
 def main():
-    paths_tuple = namedtuple('ui', ['type', 'path_to_images', 'path_to_images_label', 'path_to_model'])
+    paths_tuple = namedtuple('ui',
+                             ['type', 'path_to_images', 'path_to_images_label', 'path_to_model', 'level_of_confidance'])
     print("Choose type of device. \n 1. Jetson nano(dusty) \n 2. Pc by pytroch-ssd \n")
     paths_tuple.type = input("Type 1 or 2:")
     paths_tuple.path_to_images = input("Path to images:")
     paths_tuple.path_to_images_label = input("Path to labels:")
     paths_tuple.path_to_model = input("Path to model:")
+    paths_tuple.level_of_confidance = input("Level of confidence(1-100):")
     start(paths_tuple)
 
 
@@ -25,7 +27,8 @@ def start(paths_tuple):
     contents = listdir(str(paths_tuple.path_to_images))
     files = filter(lambda f: isfile(join(paths_tuple.path_to_images, f)), contents)
     files_list = filtring.remove_xml_from_file_list(list(files))
-    ctx = Context(int(paths_tuple.type), paths_tuple.path_to_model, paths_tuple.path_to_images_label, paths_tuple.path_to_images)
+    ctx = Context(int(paths_tuple.type), paths_tuple.path_to_model, paths_tuple.path_to_images_label,
+                  paths_tuple.path_to_images, int(paths_tuple.level_of_confidance))
     json_converter = Converter()
     for file in files_list:
         rect_list, width, height = ctx.execute(str(file))
