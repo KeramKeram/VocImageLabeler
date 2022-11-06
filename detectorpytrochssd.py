@@ -7,8 +7,10 @@ class DetectorPytrochSSD:
     path_to_label = ""
     detector = None
     predictor = None
+    confidence = 90
 
-    def __init__(self, custom_model, custom_labels):
+    def __init__(self, custom_model, custom_labels, confidence):
+        self.confidence = confidence
         self.path_to_model = custom_model
         self.path_to_label = custom_labels
         class_names = [name.strip() for name in open(self.path_to_label).readlines()]
@@ -19,7 +21,7 @@ class DetectorPytrochSSD:
 
 
     def run(self, image):
-        boxes, labels, probs = self.predictor.predict(image, 10, 0.4)
+        boxes, labels, probs = self.predictor.predict(image, 10, self.confidence/100)
         points_dict = dict()
         for i in range(boxes.size(0)):
             box = boxes[i, :]

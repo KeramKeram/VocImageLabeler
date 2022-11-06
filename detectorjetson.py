@@ -11,8 +11,9 @@ class DetectorJetson:
     path_to_model = ""
     path_to_label = ""
     detector = None
-
-    def __init__(self, custom_model, custom_labels):
+    confidence = 90
+    def __init__(self, custom_model, custom_labels, confidence):
+        self.confidence = confidence
         argv = ['--model=' + custom_model, '--labels=' + custom_labels,
                 '--input-blob=input_0', '--output-cvg=scores', '--output-bbox=boxes']
         parser = argparse.ArgumentParser(
@@ -43,6 +44,8 @@ class DetectorJetson:
         detections = self.detector.Detect(image)
         points_dict = dict()
         for detect in detections:
+            if detect.Confidence < self.confidence:
+                continue
             if detect.ClassID not in points_dict:
                 points_dict[detect.ClassID] = []
             points_dict[detect.ClassID].append([detect.ClassID, detect.Left, detect.Top, detect.Right, detect.Bottom])
