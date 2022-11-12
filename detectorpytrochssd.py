@@ -1,5 +1,7 @@
 import sys
-sys.path.append('/home/radek/PycharmProjects/VocImageLabeler/pytorchssd')
+import os
+
+sys.path.append(os.path.dirname(__file__) + '/pytorchssd')
 from pytorchssd.vision.ssd.mobilenetv1_ssd import create_mobilenetv1_ssd, create_mobilenetv1_ssd_predictor
 
 class DetectorPytrochSSD:
